@@ -92,6 +92,7 @@ public class PullNotification {
         parameterParser(args);
 
         // TODO validate params and output missing
+        // TODO manual status override when status is provided
     }
 
     private void parameterParser(String[] args) {
