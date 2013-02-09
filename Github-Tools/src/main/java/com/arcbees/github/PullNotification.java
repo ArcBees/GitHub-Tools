@@ -43,7 +43,7 @@ public class PullNotification {
     /**
      * Parameter -sha=c9dc29c60df9bf8af8248e77db0e2eca1d7b7e4d Ref Sha which is Team City parameter %build.vcs.number%
      */
-    private String commitShaRef = "";
+    private String commitShaRef = "dba3fdc6c35a9ec42b92314ace0d1662adf021e9";
 
     /**
      * Parameter -settings=~/.m2/settings.xml Override the default maven settings url.
@@ -268,7 +268,7 @@ public class PullNotification {
             status.setState(CommitStatus.STATE_FAILURE);
 
         } else if (buildStatus.contains("pend")) {
-            status.setDescription("The build in progress...");
+            status.setDescription("The build is in progress...");
             status.setState(CommitStatus.STATE_PENDING);
 
         } else if (buildStatus.contains("succ")) {
