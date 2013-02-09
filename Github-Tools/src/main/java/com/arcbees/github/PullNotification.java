@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.egit.github.core.CommitComment;
 import org.eclipse.egit.github.core.CommitStatus;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.client.GitHubClient;
@@ -23,104 +24,171 @@ public class PullNotification {
         PullNotification.newInstance(args).run();
     }
 
-    public static PullNotification newInstance(String[] args) {
+    private static PullNotification newInstance(String[] args) {
         return new PullNotification(args);
     }
 
     private GitHubClient client;
 
     /**
-     * Parameter -ro=branflake2267
-     * Repository Owner [user or organization]
+     * Parameter -ro=branflake2267 Repository Owner [user or organization]
      */
     private String repoOwner = "branflake2267";
 
     /**
-     * Parameter -rn=Sandbox
-     * Repository Name - like [organization/name] or [user/name] - only include the name
+     * Parameter -rn=Sandbox Repository Name - like [organization/name] or [user/name] - only include the name
      */
     private String repoName = "Sandbox";
 
     /**
-     * Parameter -sha=c9dc29c60df9bf8af8248e77db0e2eca1d7b7e4d
-     * Ref Sha which is Team City parameter %build.vcs.number%
+     * Parameter -sha=c9dc29c60df9bf8af8248e77db0e2eca1d7b7e4d Ref Sha which is Team City parameter %build.vcs.number%
      */
-    private String commitShaRef = "c9dc29c60df9bf8af8248e77db0e2eca1d7b7e4d";
+    private String commitShaRef = "dba3fdc6c35a9ec42b92314ace0d1662adf021e9";
 
     /**
-     * Parameter -settings=~/.m2/settings.xml 
-     * Override the default maven settings url.
+     * Parameter -settings=~/.m2/settings.xml Override the default maven settings url.
      */
     private String mavenSettingsPath = "~/.m2/settings.xml";
 
     /**
-     * Parameter -github=github
-     * Store the github credentials as a server. <server> <id>github</id> <username>branflake2267</username>
-     * <password>xxxxxxx</password> </server>
+     * Parameter -github=github Store the github credentials as a server. <server> <id>github</id>
+     * <username>branflake2267</username> <password>xxxxxxx</password> </server>
      */
     private String mavenSettingsGithubServerId = "github";
 
     /**
-     * Parameter -teamcity=teamcity-gonevertical
-     * Store the Team City credentials as a server. <server> <id>teamcity-gonevertical</id>
-     * <username>branflake2267</username> <password>xxxxxxx</password> <url>http://teamcity.gonevertical.org</url>
-     * </server>
+     * Parameter -teamcity=teamcity-gonevertical Store the Team City credentials as a server. <server>
+     * <id>teamcity-gonevertical</id> <username>branflake2267</username> <password>xxxxxxx</password>
+     * <url>http://teamcity.gonevertical.org</url> </server>
      */
     private String mavenSettingsTeamcityServerId = "teamcity-gonevertical";
 
     /**
-     * Parameter -returnurl=http://teamcity.gonevertical.org
-     * Provide a return link for build server investigation
+     * Parameter -returnurl=http://teamcity.gonevertical.org Provide a return link for build server investigation
      */
     private String buildServerReturnUrl = "http://teamcity.gonevertical.org";
 
     /**
-     * Parameter -status=pending 
-     * Provide a manual status update
+     * Parameter -status=pending Provide a manual status update
      */
-    private String status = "error";
-    
+    private String status;
+
     /**
-     * Parameter -buildid=299
-     * Provide the buildId
+     * Parameter -buildid=299 Provide the buildId
      */
     private int buildId = 299;
+    
+    /**
+     * Parameter -skipcomment=[false|true]
+     */
+    private boolean skipGitHubHComment = false;
 
     private MavenProperties properties;
 
-    public PullNotification(String[] args) {
-        parameterParser(args);
+    private PullNotification() {
+    }
 
-        // TODO validate params and output missing
-        // TODO manual status override when status is provided
+    private PullNotification(String[] args) {
+        parameterParser(args);
     }
 
     private void parameterParser(String[] args) {
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-ro")) {
+            if (args[i].matches("^-ro.*")) {
                 repoOwner = parameterParser(args[i]);
-            } else if (args[i].equals("-rn")) {
+            } else if (args[i].matches("^-rn.*")) {
                 repoName = parameterParser(args[i]);
-            } else if (args[i].equals("-sha")) {
+            } else if (args[i].matches("^-sha.*")) {
                 commitShaRef = parameterParser(args[i]);
-            } else if (args[i].equals("-settings")) {
+            } else if (args[i].matches("^-settings.*")) {
                 String path = parameterParser(args[i]);
                 if (path != null) {
                     mavenSettingsPath = path;
                 }
-            } else if (args[i].equals("-github")) {
+            } else if (args[i].matches("^-github.*")) {
                 mavenSettingsGithubServerId = parameterParser(args[i]);
-            } else if (args[i].equals("-teamcity")) {
+            } else if (args[i].matches("^-teamcity.*")) {
                 mavenSettingsTeamcityServerId = parameterParser(args[i]);
-            } else if (args[i].equals("-returnurl")) {
+            } else if (args[i].matches("^-returnurl.*")) {
                 buildServerReturnUrl = parameterParser(args[i]);
-            } else if (args[i].equals("-status")) {
+            } else if (args[i].matches("^-status.*")) {
                 status = parameterParser(args[i]);
-            } else if (args[i].equals("-buildid")) {
+            } else if (args[i].matches("^-buildid.*")) {
                 String id = parameterParser(args[i]);
-                buildId = Integer.valueOf(id);
+                try {
+                    buildId = Integer.valueOf(id);
+                } catch (NumberFormatException e) {
+                    buildId = 0;
+                }
+            } else if (args[i].matches("^-status.*")) {
+                status = parameterParser(args[i]);
+            } else if (args[i].matches("^-help.*")) {
+                displayHelp();
+            } else if (args[i].matches("^-skipcomment.*")) {
+                skipGitHubHComment = Boolean.valueOf(parameterParser(args[i]));
             }
         }
+
+        boolean mandatoryRequired = false;
+        if (repoOwner == null) {
+            mandatoryRequired = true;
+            System.out.println("arg misssing -ro=RepositoryOwner[user|organization]");
+        }
+
+        if (repoName == null) {
+            mandatoryRequired = true;
+            System.out.println("arg missing -rn=RepositoryName");
+        }
+
+        if (commitShaRef == null) {
+            mandatoryRequired = true;
+            System.out.println("arg missing -sha=[%build.vcs.number%] sha commit reference");
+        }
+
+        if (mavenSettingsGithubServerId == null) {
+            mandatoryRequired = true;
+            System.out.println("arg missing -github=MavenGithubServerId");
+        }
+
+        if (mavenSettingsTeamcityServerId == null) {
+            mandatoryRequired = true;
+            System.out.println("arg missing -teamcity=MavenTeamCityServerId");
+        }
+
+        if (buildServerReturnUrl == null) {
+            mandatoryRequired = true;
+            System.out.println("arg missing -returnurl=BuildServerReturnUrl");
+        }
+
+        // if the status is provided no need to check the teamcity build number using rest api
+        if (buildId == 0 && status == null) {
+            mandatoryRequired = true;
+            System.out.println("arg missing -buildid=[%build.number%]");
+        }
+
+        if (mandatoryRequired == true) {
+            System.out.println("Mandatory argurment is required. Exiting");
+            System.exit(0);
+        }
+    }
+
+    private void displayHelp() {
+        String s = "Mandatory arguments:\n";
+        s += "-ro=RepositoryOwner[user|organization]\n";
+        s += "-rn=RepositoryName\n";
+        s += "-sha=[%build.vcs.number%] sha commit reference\n";
+        s += "-github=MavenGithubServerId\n";
+        s += "-teamcity=MavenTeamCityServerId";
+        s += "-returnurl=BuildServerReturnUrl\n";
+        s += "-buildid=[%build.number%]";
+
+        s += "\n\nOptional arguments:\n";
+        s += "-settings=[~/.m2/settings.xml]\n";
+        s += "-status=[fail|pending|success|error]\n";
+        s += "-skipcomment=[true|false]\n";
+        s += "-help\n";
+
+        System.out.println(s);
     }
 
     private String parameterParser(String param) {
@@ -147,14 +215,30 @@ public class PullNotification {
             return;
         }
 
-        try {
-            autoChangeGitPullStatus(buildId);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (status != null) {
+            try {
+                changeStatus(status);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                autoCheckAndChangeGitPullStatus(buildId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!skipGitHubHComment) {
+            try {
+                addCommitMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void autoChangeGitPullStatus(int buildId) throws IOException {
+    private void autoCheckAndChangeGitPullStatus(int buildId) throws IOException {
         MavenTeamCity teamcitySettings = properties.getTeamCityCredentials(mavenSettingsTeamcityServerId);
 
         String buildServerUrl = teamcitySettings.getUrl();
@@ -167,7 +251,8 @@ public class PullNotification {
         Build build = new Build();
         build = restRequest.fetchBuildStatus(buildId);
 
-        changeStatus(build.getStatus());
+        status = build.getStatus();
+        changeStatus(status);
     }
 
     private void changeStatus(String buildStatus) throws IOException {
@@ -183,7 +268,7 @@ public class PullNotification {
             status.setState(CommitStatus.STATE_FAILURE);
 
         } else if (buildStatus.contains("pend")) {
-            status.setDescription("The build in progress...");
+            status.setDescription("The build is in progress...");
             status.setState(CommitStatus.STATE_PENDING);
 
         } else if (buildStatus.contains("succ")) {
@@ -200,6 +285,17 @@ public class PullNotification {
         status.setUpdatedAt(new Date());
 
         changeStatus(status);
+    }
+
+    private void addCommitMessage() throws IOException {
+        String message = "Build server update... " + status.toLowerCase() + ".";
+
+        CommitComment comment = new CommitComment();
+        comment.setBody(message);
+        comment.setUrl(buildServerReturnUrl);
+
+        CommitService service = new CommitService(client);
+        service.addComment(getRepository(), commitShaRef, comment);
     }
 
     private void changeStatus(CommitStatus status) throws IOException {

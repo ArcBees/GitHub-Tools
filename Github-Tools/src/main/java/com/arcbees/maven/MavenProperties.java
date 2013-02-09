@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 public class MavenProperties {
     private final String settingsPath;
-    
+
     private Document document;
 
     @SuppressWarnings("unused")
@@ -38,29 +38,60 @@ public class MavenProperties {
         String password = getServerValue(githubServerId, "password");
         return new MavenGithub(username, password);
     }
-    
+
     public MavenTeamCity getTeamCityCredentials(String teamcityServerId) {
         String username = getServerValue(teamcityServerId, "username");
         String password = getServerValue(teamcityServerId, "password");
-        String url = getServerValue(teamcityServerId, "url");
+        String url = getServerConfigurationValue(teamcityServerId, "url");
         return new MavenTeamCity(username, password, url);
     }
 
-    public String getServerValue(String name, String node) {
+    private String getServerConfigurationValue(String serverId, String node) {
         NodeList serversNodes = document.getElementsByTagName("servers");
         NodeList serverNodes = serversNodes.item(0).getChildNodes();
-        
+
         String value = null;
         for (int i = 0; i < serverNodes.getLength(); i++) {
             Node serverNode = serverNodes.item(i);
-            if (serverNodes.item(i).hasChildNodes() && hasId(serverNode, name)) {
-                value = getValue(serverNode, node);
+            if (serverNodes.item(i).hasChildNodes() && hasIdNodeName(serverNode, serverId)) {
+                value = getConfurationValue(serverNode, node);
+                break;
             }
         }
         return value;
     }
 
-    public boolean hasId(Node serverNode, String name) {
+    private String getConfurationValue(Node serverElements, String nodeName) {
+        Node confNode = getNode(serverElements, "configuration");
+        return getValueFromNodeList(confNode, nodeName);
+    }
+    
+    public Node getNode(Node node, String nodeName) {
+        NodeList list = node.getChildNodes();
+        for (int i = 0; i < list.getLength(); i++) {
+            Node serverNode = list.item(i);
+            if (list.item(i).hasChildNodes() && list.item(i).getNodeName().equals(nodeName)) {
+                return serverNode;
+            }
+        }
+        return null;
+    }
+
+    public String getServerValue(String serverId, String nodeName) {
+        NodeList serversNodes = document.getElementsByTagName("servers");
+        NodeList serverNodes = serversNodes.item(0).getChildNodes();
+
+        String value = null;
+        for (int i = 0; i < serverNodes.getLength(); i++) {
+            Node serverNode = serverNodes.item(i);
+            if (serverNodes.item(i).hasChildNodes() && hasIdNodeName(serverNode, serverId)) {
+                value = getValueFromNodeList(serverNode, nodeName);
+            }
+        }
+        return value;
+    }
+
+    public boolean hasIdNodeName(Node serverNode, String name) {
         NodeList elements = serverNode.getChildNodes();
         boolean isNode = false;
         for (int i = 1; i < elements.getLength(); i++) {
@@ -73,12 +104,12 @@ public class MavenProperties {
         return isNode;
     }
 
-    public String getValue(Node serverNode, String name) {
-        NodeList elements = serverNode.getChildNodes();
+    public String getValueFromNodeList(Node node, String name) {
+        NodeList elements = node.getChildNodes();
         String value = null;
         for (int i = 1; i < elements.getLength(); i++) {
             Node element = elements.item(i);
-            //System.out.println("serverElement=" + element.getTextContent());
+            // System.out.println("serverElement=" + element.getTextContent());
             if (element.getNodeName().equals(name)) {
                 value = element.getTextContent();
                 break;
@@ -86,7 +117,7 @@ public class MavenProperties {
         }
         return value;
     }
-    
+
     private String parseSettingsPath(String settingsPath) {
         if (settingsPath.matches("^~.*")) {
             settingsPath = settingsPath.replace("~", "");
