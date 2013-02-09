@@ -13,20 +13,23 @@ import com.google.gson.stream.JsonReader;
 
 public class RestRequest {
     public static JsonElement fetchJson(String username, String password, String urlEndpoint) throws IOException {
-        String authString = username + ":" + password;
-        
-        byte[] encodedBasicAuth = Base64.encodeBase64(authString.getBytes());
-        String encodedBasicAuthStr = new String(encodedBasicAuth);
-
         URL url = new URL(urlEndpoint);
         URLConnection urlConnection = url.openConnection();
-        urlConnection.setRequestProperty("Authorization", "Basic " + encodedBasicAuthStr);
+
+        if (username != null && password != null) {
+            String authString = username + ":" + password;
+            byte[] encodedBasicAuth = Base64.encodeBase64(authString.getBytes());
+            String encodedBasicAuthStr = new String(encodedBasicAuth);
+            
+            urlConnection.setRequestProperty("Authorization", "Basic " + encodedBasicAuthStr);
+        }
+
         urlConnection.setRequestProperty("Accept", "application/json");
         urlConnection.connect();
 
         JsonReader reader = new JsonReader(new InputStreamReader(urlConnection.getInputStream()));
         JsonParser parser = new JsonParser();
-        
+
         return parser.parse(reader);
     }
 }

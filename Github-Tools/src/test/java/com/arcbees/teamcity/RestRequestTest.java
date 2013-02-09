@@ -31,4 +31,12 @@ public class RestRequestTest {
         
         Assert.assertNotNull(json);
     }
+    
+//    @Test
+//    public void testRestRequestWithNoCredentials() throws IOException {
+//        String urlEndpoint = "http://teamcity.gonevertical.org/httpAuth/app/rest/builds/id:299";
+//        JsonElement json = RestRequest.fetchJson(null, null, urlEndpoint);
+//        
+//        Assert.assertNotNull(json);
+//    }
 }

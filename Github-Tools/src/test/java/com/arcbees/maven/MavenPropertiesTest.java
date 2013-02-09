@@ -48,7 +48,7 @@ public class MavenPropertiesTest {
     }
     
     @Test
-    public void testGitHubPropertiesTeamCity() {
+    public void testTeamCityProperties() {
         MavenProperties properties = new MavenProperties("~/.m2/settings.xml");
         try {
             properties.fetchProperties();
