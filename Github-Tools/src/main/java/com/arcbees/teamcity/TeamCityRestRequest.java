@@ -9,6 +9,8 @@ import com.google.gson.JsonElement;
 
 /**
  * Team City Rest Request
+ * 
+ * @See http://confluence.jetbrains.com/display/TW/REST+API+Plugin#RESTAPIPlugin-Developmentlinks
  */
 public class TeamCityRestRequest {
     private static String PATH_BUILD = "/httpAuth/app/rest/builds/id:";

@@ -23,7 +23,7 @@ public class MavenProperties {
     }
 
     public MavenProperties(String settingsPath) {
-        this.settingsPath = settingsPath;
+        this.settingsPath = parseSettingsPath(settingsPath);
     }
 
     public Document fetchProperties() throws SAXException, IOException, ParserConfigurationException {
@@ -78,5 +78,14 @@ public class MavenProperties {
             }
         }
         return value;
+    }
+    
+    private String parseSettingsPath(String settingsPath) {
+        if (settingsPath.matches("^~.*")) {
+            settingsPath = settingsPath.replace("~", "");
+            String home = System.getProperty("user.home");
+            settingsPath = home + settingsPath;
+        }
+        return settingsPath;
     }
 }

@@ -9,6 +9,8 @@ import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.CommitService;
 import org.eclipse.egit.github.core.service.RepositoryService;
 
+import com.arcbees.maven.MavenProperties;
+
 public class PullNotification {
     public static void main(String[] args) {
         PullNotification.newInstance(args);
@@ -19,8 +21,11 @@ public class PullNotification {
     }
     
     private GitHubClient client;
+    
+    // TODO params
     private String repoOwner = "branflake2267";
     private String repoName = "Sandbox";
+    private String settingsPath = "~/.m2/settings.xml";
     
     public PullNotification(String[] args) {
         // TODO args
@@ -32,6 +37,8 @@ public class PullNotification {
     }
 
     private void loginToGitHub() {
+        MavenProperties properties = new MavenProperties(settingsPath);
+        
         client = new GitHubClient();
         client.setCredentials("branflake2267", "xxx");
     }
