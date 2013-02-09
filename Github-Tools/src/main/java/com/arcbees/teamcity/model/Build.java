@@ -11,9 +11,11 @@ public class Build {
     public int getId() {
         return id;
     }
+    
     public int getNumber() {
         return number;
     }
+    
     public String getStatus() {
         return status;
     }
