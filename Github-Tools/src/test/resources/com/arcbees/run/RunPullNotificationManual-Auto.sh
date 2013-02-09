@@ -18,12 +18,18 @@ echo $MYCP
 echo ""
 
 # Pull Notification Options
+
+# Repostiory
 OPTS="-ro=branflake2267"
 OPTS="$OPTS -rn=Sandbox"
+
+# Team City variables
 OPTS="$OPTS -sha=%build.vcs.number%"
+OPTS="$OPTS -returnurl=%teamcity.serverUrl%"
+
+# Maven settings server id
 OPTS="$OPTS -github=github"
 OPTS="$OPTS -teamcity=teamcity-gonevertical"
-OPTS="$OPTS -returnurl=%teamcity.serverUrl%"
 
 # auto check build status
 OPTS="$OPTS -buildid=%build.vcs.number%"
