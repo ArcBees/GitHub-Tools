@@ -291,7 +291,7 @@ public class PullNotification {
         String message = "Build server update... " + status.toLowerCase() + ".";
 
         CommitComment comment = new CommitComment();
-        comment.setBodyHtml(message);
+        comment.setBody(message);
         comment.setUrl(buildServerReturnUrl);
 
         CommitService service = new CommitService(client);
