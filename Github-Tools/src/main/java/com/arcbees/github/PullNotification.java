@@ -147,13 +147,13 @@ public class PullNotification {
         }
 
         try {
-            autoChangeStatus(buildId);
+            autoChangeGitPullStatus(buildId);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void autoChangeStatus(int buildId) throws IOException {
+    private void autoChangeGitPullStatus(int buildId) throws IOException {
         MavenTeamCity teamcitySettings = properties.getTeamCityCredentials(mavenSettingsTeamcityServerId);
 
         String buildServerUrl = teamcitySettings.getUrl();
@@ -213,9 +213,6 @@ public class PullNotification {
         return repoService.getRepository(repoOwner, repoName);
     }
 
-    /**
-     * Login to git.
-     */
     private void loginToGitHub() {
         MavenGithub githubCredentials = properties.getGithubCredentials(mavenSettingsGithubServerId);
 
