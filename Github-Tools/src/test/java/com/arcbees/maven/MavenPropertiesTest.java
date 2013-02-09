@@ -14,7 +14,7 @@ public class MavenPropertiesTest {
 
     @Before
     public void setup() {
-        properties = new MavenProperties("/Users/branflake2267/.m2/settings.xml");
+        properties = new MavenProperties("github", "/Users/branflake2267/.m2/settings.xml");
         try {
             properties.fetchProperties();
         } catch (SAXException e) {

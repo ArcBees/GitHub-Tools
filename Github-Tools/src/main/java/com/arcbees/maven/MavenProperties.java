@@ -14,16 +14,19 @@ import org.xml.sax.SAXException;
 
 public class MavenProperties {
     private final String settingsPath;
+    private final String serverId;
 
     private Document document;
 
     @SuppressWarnings("unused")
     private MavenProperties() {
         this.settingsPath = null;
+        this.serverId = null;
     }
 
-    public MavenProperties(String settingsPath) {
+    public MavenProperties(String settingsPath, String serverId) {
         this.settingsPath = settingsPath;
+        this.serverId = serverId;
     }
 
     public Document fetchProperties() throws SAXException, IOException, ParserConfigurationException {
@@ -34,8 +37,8 @@ public class MavenProperties {
     }
 
     public MavenGithub getGithubCredentials() {
-        String username = getServerValue("github", "username");
-        String password = getServerValue("github", "password");
+        String username = getServerValue(serverId, "username");
+        String password = getServerValue(serverId, "password");
         return new MavenGithub(username, password);
     }
 
