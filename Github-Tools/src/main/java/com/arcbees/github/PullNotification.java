@@ -252,6 +252,9 @@ public class PullNotification {
         build = restRequest.fetchBuildStatus(buildId);
 
         status = build.getStatus();
+        
+        System.out.println("autoCheckAndChangeGitPullStatus(): status=" + status);
+        
         changeStatus(status);
     }
 

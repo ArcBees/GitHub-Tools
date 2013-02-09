@@ -9,24 +9,24 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 public class MavenPropertiesTest {
-    @Test
-    public void testGitHubProperties() {
-        MavenProperties properties = new MavenProperties("/Users/branflake2267/.m2/settings.xml");
-        try {
-            properties.fetchProperties();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        
-        MavenGithub github = properties.getGithubCredentials("github");
-        
-        Assert.assertEquals("branflake2267", github.getUsername());
-        Assert.assertNotNull(github.getPassword());
-    }
+//    @Test
+//    public void testGitHubProperties() {
+//        MavenProperties properties = new MavenProperties("/Users/branflake2267/.m2/settings.xml");
+//        try {
+//            properties.fetchProperties();
+//        } catch (SAXException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ParserConfigurationException e) {
+//            e.printStackTrace();
+//        }
+//        
+//        MavenGithub github = properties.getGithubCredentials("github");
+//        
+//        Assert.assertEquals("branflake2267", github.getUsername());
+//        Assert.assertNotNull(github.getPassword());
+//    }
     
     @Test
     public void testGitHubPropertiesHome() {
