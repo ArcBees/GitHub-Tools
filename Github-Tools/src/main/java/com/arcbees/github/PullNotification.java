@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.egit.github.core.CommitComment;
 import org.eclipse.egit.github.core.CommitStatus;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.client.GitHubClient;
@@ -76,12 +77,17 @@ public class PullNotification {
      * Parameter -buildid=299 Provide the buildId
      */
     private int buildId = 299;
+    
+    /**
+     * Parameter -skipcomment=[false|true]
+     */
+    private boolean skipGitHubHComment = false;
 
     private MavenProperties properties;
 
     private PullNotification() {
     }
-    
+
     private PullNotification(String[] args) {
         parameterParser(args);
     }
@@ -118,6 +124,8 @@ public class PullNotification {
                 status = parameterParser(args[i]);
             } else if (args[i].matches("^-help.*")) {
                 displayHelp();
+            } else if (args[i].matches("^-skipcomment.*")) {
+                skipGitHubHComment = Boolean.valueOf(parameterParser(args[i]));
             }
         }
 
@@ -141,7 +149,7 @@ public class PullNotification {
             mandatoryRequired = true;
             System.out.println("arg missing -github=MavenGithubServerId");
         }
-        
+
         if (mavenSettingsTeamcityServerId == null) {
             mandatoryRequired = true;
             System.out.println("arg missing -teamcity=MavenTeamCityServerId");
@@ -177,6 +185,7 @@ public class PullNotification {
         s += "\n\nOptional arguments:\n";
         s += "-settings=[~/.m2/settings.xml]\n";
         s += "-status=[fail|pending|success|error]\n";
+        s += "-skipcomment=[true|false]\n";
         s += "-help\n";
 
         System.out.println(s);
@@ -205,7 +214,7 @@ public class PullNotification {
             e.printStackTrace();
             return;
         }
-        
+
         if (status != null) {
             try {
                 changeStatus(status);
@@ -215,6 +224,14 @@ public class PullNotification {
         } else {
             try {
                 autoCheckAndChangeGitPullStatus(buildId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!skipGitHubHComment) {
+            try {
+                addCommitMessage();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -234,7 +251,8 @@ public class PullNotification {
         Build build = new Build();
         build = restRequest.fetchBuildStatus(buildId);
 
-        changeStatus(build.getStatus());
+        status = build.getStatus();
+        changeStatus(status);
     }
 
     private void changeStatus(String buildStatus) throws IOException {
@@ -267,6 +285,17 @@ public class PullNotification {
         status.setUpdatedAt(new Date());
 
         changeStatus(status);
+    }
+
+    private void addCommitMessage() throws IOException {
+        String message = "Build server update... " + status.toLowerCase() + ".";
+
+        CommitComment comment = new CommitComment();
+        comment.setBodyHtml(message);
+        comment.setUrl(buildServerReturnUrl);
+
+        CommitService service = new CommitService(client);
+        service.addComment(getRepository(), commitShaRef, comment);
     }
 
     private void changeStatus(CommitStatus status) throws IOException {
