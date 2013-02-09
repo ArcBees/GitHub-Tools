@@ -32,7 +32,7 @@ OPTS="$OPTS -github=github"
 OPTS="$OPTS -teamcity=teamcity-gonevertical"
 
 # auto check build status
-OPTS="$OPTS -buildid=%build.vcs.number%"
+OPTS="$OPTS -buildid=%teamcity.build.id%"
 
 echo "~~~OPTIONS: $OPTS"
 
