@@ -32,7 +32,7 @@ public class TeamCityRestRequestTest {
         int buildId = 299;
         
         TeamCityRestRequest rest = new TeamCityRestRequest(serverUrl, username, password);
-        Build build = rest.fetchBuild(buildId);
+        Build build = rest.fetchBuildStatus(buildId);
         
         Assert.assertNotNull(build);
         Assert.assertTrue(build.getStatus().contains("SUCC"));

@@ -38,6 +38,13 @@ public class MavenProperties {
         String password = getServerValue(githubServerId, "password");
         return new MavenGithub(username, password);
     }
+    
+    public MavenTeamCity getTeamCityCredentials(String teamcityServerId) {
+        String username = getServerValue(teamcityServerId, "username");
+        String password = getServerValue(teamcityServerId, "password");
+        String url = getServerValue(teamcityServerId, "url");
+        return new MavenTeamCity(username, password, url);
+    }
 
     public String getServerValue(String name, String node) {
         NodeList serversNodes = document.getElementsByTagName("servers");

@@ -6,7 +6,7 @@ package com.arcbees.teamcity.model;
 public class Build {
     private int id;
     private int number;
-    private String status;
+    private String status = "error";
     
     public int getId() {
         return id;

@@ -46,4 +46,24 @@ public class MavenPropertiesTest {
         Assert.assertEquals("branflake2267", github.getUsername());
         Assert.assertNotNull(github.getPassword());
     }
+    
+    @Test
+    public void testGitHubPropertiesTeamCity() {
+        MavenProperties properties = new MavenProperties("~/.m2/settings.xml");
+        try {
+            properties.fetchProperties();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        
+        MavenTeamCity settings = properties.getTeamCityCredentials("teamcity-gonevertical");
+        
+        Assert.assertEquals("branflake2267", settings.getUsername());
+        Assert.assertNotNull(settings.getPassword());
+        Assert.assertEquals("http://teamcity.gonevertical.org", settings.getUrl());
+    }
 }

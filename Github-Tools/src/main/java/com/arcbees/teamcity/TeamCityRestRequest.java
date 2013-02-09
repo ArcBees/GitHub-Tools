@@ -15,13 +15,13 @@ import com.google.gson.JsonElement;
 public class TeamCityRestRequest {
     private static String PATH_BUILD = "/httpAuth/app/rest/builds/id:";
     
-    private final String serverUrl;
+    private final String buildServerUrl;
     private final String username;
     private final String password;
 
     @SuppressWarnings("unused")
     private TeamCityRestRequest() {
-        serverUrl = null;
+        buildServerUrl = null;
         username = null;
         password = null;
     }
@@ -29,16 +29,16 @@ public class TeamCityRestRequest {
     /**
      * Fetch the build progress status
      * 
-     * @param serverUrl - 'http://domain.tld:port'
+     * @param buildServerUrl - 'http://domain.tld:port'
      */
-    public TeamCityRestRequest(String serverUrl, String username, String password) {
-        this.serverUrl = serverUrl;
-        this.username = username;
-        this.password = password;
+    public TeamCityRestRequest(String buildServerUrl, String buildServerUsername, String buildServerPassword) {
+        this.buildServerUrl = buildServerUrl;
+        this.username = buildServerUsername;
+        this.password = buildServerPassword;
     }
     
-    public Build fetchBuild(int buildId) throws IOException {
-        String urlEndpoint = serverUrl + PATH_BUILD + Integer.toString(buildId);
+    public Build fetchBuildStatus(int buildId) throws IOException {
+        String urlEndpoint = buildServerUrl + PATH_BUILD + Integer.toString(buildId);
         
         JsonElement json = RestRequest.fetchJson(username, password, urlEndpoint);
         Gson gson = new Gson();
