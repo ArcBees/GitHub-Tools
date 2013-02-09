@@ -43,7 +43,7 @@ public class PullNotification {
     /**
      * Parameter -sha=c9dc29c60df9bf8af8248e77db0e2eca1d7b7e4d Ref Sha which is Team City parameter %build.vcs.number%
      */
-    private String commitShaRef = "c9dc29c60df9bf8af8248e77db0e2eca1d7b7e4d";
+    private String commitShaRef = "";
 
     /**
      * Parameter -settings=~/.m2/settings.xml Override the default maven settings url.
