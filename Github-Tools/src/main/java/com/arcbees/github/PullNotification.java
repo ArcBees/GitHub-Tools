@@ -138,6 +138,6 @@ public class PullNotification {
         MavenGithub githubCredentials = properties.getGithubCredentials(mavenSettingsGithubServerId);
 
         client = new GitHubClient();
-        client.setCredentials(githubCredentials.getUsername(), githubCredentials.getUsername());
+        client.setCredentials(githubCredentials.getUsername(), githubCredentials.getPassword());
     }
 }
