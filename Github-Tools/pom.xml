@@ -11,7 +11,6 @@
 
     <properties>
         <tomcat.path>/github-tools</tomcat.path>
-        <tomcat.server.url>http://teamcity.gonevertical.org/manager/text</tomcat.server.url>
         <tomcat-maven-plugin.version>2.0</tomcat-maven-plugin.version>
         <maven.war.plugin>2.3</maven.war.plugin>
         <maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
@@ -62,9 +61,30 @@
                 <version>${tomcat-maven-plugin.version}</version>
                 <configuration>
                     <!-- add the security credentials to ~/.m2/settings.xml <id>...</id> -->
-                    <server>maven-tomcat</server>
+                    <server>goneverticalorg-tomcat</server>
                     <path>${tomcat.path}</path>
-                    <url>${tomcat.server.url}</url>
+                    <url>http://teamcity.gonevertical.org/manager/text</url>
+                    <update>true</update>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat-maven-plugin.version}</version>
+                <configuration>
+                    <!-- add the security credentials to ~/.m2/settings.xml <id>...</id> -->
+                    <server>arcbees-tomcat</server>
+                    <path>${tomcat.path}</path>
+                    <url>http://teamcity-private.arcbees.com/manager/text</url>
                     <update>true</update>
                 </configuration>
                 <executions>
