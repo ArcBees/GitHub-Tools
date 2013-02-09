@@ -32,7 +32,7 @@ public class PullNotification {
     // TODO params
     private String repoOwner = "branflake2267";
     private String repoName = "Sandbox";
-    private String commitShaRef = "33dfb4b52e63bf0b97e86704fdc0bf432635176c";
+    private String commitShaRef = "c9dc29c60df9bf8af8248e77db0e2eca1d7b7e4d";
 
     private String mavenSettingsPath = "~/.m2/settings.xml";
     private String mavenSettingsGithubServerId = "github";
@@ -50,65 +50,46 @@ public class PullNotification {
 
     private void run() {
         properties = new MavenProperties(mavenSettingsPath);
-        
-        loginToGitHub();
-
-        autoChangeStatus(299);
-    }
-
-    private void autoChangeStatus(int buildId) {
-        MavenTeamCity teamcitySettings = properties.getTeamCityCredentials(mavenSettingsTeamcityServerId);
-        
-        String buildServerUrl = teamcitySettings.getUrl();
-        String buildServerUsername = teamcitySettings.getUsername();
-        String buildServerPassword = teamcitySettings.getPassword();
-        
-        TeamCityRestRequest restRequest = new TeamCityRestRequest(buildServerUrl, buildServerUsername,
-                buildServerPassword);
-        
-        Build build = new Build();
-        try {
-            build = restRequest.fetchBuildStatus(buildId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        changeStatus(build.getStatus());
-    }
-
-    /**
-     * Login to git. 
-     */
-    private void loginToGitHub() {
         try {
             properties.fetchProperties();
         } catch (SAXException e) {
             e.printStackTrace();
+            return;
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
+            return;
         }
 
-        MavenGithub githubCredentials = properties.getGithubCredentials(mavenSettingsGithubServerId);
-
-        client = new GitHubClient();
-        client.setCredentials(githubCredentials.getUsername(), githubCredentials.getUsername());
-    }
-
-    private Repository getRepository() {
-        RepositoryService repoService = new RepositoryService(client);
-        Repository repo = null;
         try {
-            repo = repoService.getRepository(repoOwner, repoName);
+            autoChangeStatus(299);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return repo;
     }
 
-    private void changeStatus(String buildStatus) {
-        if (buildStatus == null || buildStatus.trim().length() == 0) {
+    private void autoChangeStatus(int buildId) throws IOException {
+        MavenTeamCity teamcitySettings = properties.getTeamCityCredentials(mavenSettingsTeamcityServerId);
+
+        String buildServerUrl = teamcitySettings.getUrl();
+        String buildServerUsername = teamcitySettings.getUsername();
+        String buildServerPassword = teamcitySettings.getPassword();
+
+        TeamCityRestRequest restRequest = new TeamCityRestRequest(buildServerUrl, buildServerUsername,
+                buildServerPassword);
+
+        Build build = new Build();
+        build = restRequest.fetchBuildStatus(buildId);
+
+        changeStatus(build.getStatus());
+    }
+
+    private void changeStatus(String buildStatus) throws IOException {
+        if (buildStatus != null && buildStatus.trim().length() == 0) {
+            buildStatus = "error";
+        } else {
             buildStatus = buildStatus.toLowerCase().trim();
         }
 
@@ -131,16 +112,32 @@ public class PullNotification {
         }
 
         status.setTargetUrl(buildServerReturnUrl);
+        status.setCreatedAt(new Date());
         status.setUpdatedAt(new Date());
+        
         changeStatus(status);
     }
 
-    private void changeStatus(CommitStatus status) {
+    private void changeStatus(CommitStatus status) throws IOException {
+        loginToGitHub();
+
         CommitService service = new CommitService(client);
-        try {
-            service.createStatus(getRepository(), commitShaRef, status);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        service.createStatus(getRepository(), commitShaRef, status);
+    }
+
+    private Repository getRepository() throws IOException {
+        RepositoryService repoService = new RepositoryService(client);
+        Repository  repo = repoService.getRepository(repoOwner, repoName);
+        return repo;
+    }
+
+    /**
+     * Login to git.
+     */
+    private void loginToGitHub() {
+        MavenGithub githubCredentials = properties.getGithubCredentials(mavenSettingsGithubServerId);
+
+        client = new GitHubClient();
+        client.setCredentials(githubCredentials.getUsername(), githubCredentials.getUsername());
     }
 }
