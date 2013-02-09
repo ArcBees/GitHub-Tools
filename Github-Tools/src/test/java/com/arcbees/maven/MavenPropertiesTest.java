@@ -14,7 +14,7 @@ public class MavenPropertiesTest {
 
     @Before
     public void setup() {
-        properties = new MavenProperties("github", "/Users/branflake2267/.m2/settings.xml");
+        properties = new MavenProperties("/Users/branflake2267/.m2/settings.xml");
         try {
             properties.fetchProperties();
         } catch (SAXException e) {
@@ -28,7 +28,7 @@ public class MavenPropertiesTest {
     
     @Test
     public void testGitHubProperties() {
-        MavenGithub github = properties.getGithubCredentials();
+        MavenGithub github = properties.getGithubCredentials("github");
         
         Assert.assertEquals("branflake2267", github.getUsername());
         Assert.assertNotNull(github.getPassword());

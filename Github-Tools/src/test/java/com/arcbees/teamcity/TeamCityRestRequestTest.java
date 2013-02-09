@@ -18,10 +18,10 @@ public class TeamCityRestRequestTest {
 
     @Before
     public void setup() throws SAXException, IOException, ParserConfigurationException {
-        MavenProperties properties = new MavenProperties("github", "/Users/branflake2267/.m2/settings.xml");
+        MavenProperties properties = new MavenProperties("/Users/branflake2267/.m2/settings.xml");
         properties.fetchProperties();
         
-        github = properties.getGithubCredentials();
+        github = properties.getGithubCredentials("github");
     }
 
     @Test
