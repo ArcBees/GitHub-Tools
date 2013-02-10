@@ -20,7 +20,7 @@ Team City build server GitHub pull notification on build status application.
  * `-returnurl=%teamcity.serverUrl%` - Using the Team City variable parameter.
 
 ###Mandatory ORs
-Use either -buildid OR -status:
+Use either `-buildid` OR `-status`:
 
 * `-buildid=299` - Team City Build Id. This calls the rest api to check the status of the build. 
  * `-buildid=%teamcity.build.id%` - Using the Team City variable parameter. 
