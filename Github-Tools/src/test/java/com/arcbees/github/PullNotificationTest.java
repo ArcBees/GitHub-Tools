@@ -23,7 +23,7 @@ public class PullNotificationTest {
         String[] args = new String[7];
         args[0] = "-ro=branflake2267";
         args[1] = "-rn=Sandbox";
-        args[2] = "-sha=b5b3362f0a4d8c3bc05ba0170ea72c3f7dbdd620";
+        args[2] = "-sha=2e84e6446df300cd572930869c5ed2be8ee1f614";
         args[3] = "-github=github";
         args[4] = "-teamcity=teamcity-gonevertical";
         args[5] = "-returnurl=http://teamcity.gonevertical.org";
@@ -34,56 +34,60 @@ public class PullNotificationTest {
     
     @Test
     public void testOptionalPending() {
-        String[] args = new String[7];
+        String[] args = new String[8];
         args[0] = "-ro=branflake2267";
         args[1] = "-rn=Sandbox";
-        args[2] = "-sha=b5b3362f0a4d8c3bc05ba0170ea72c3f7dbdd620";
+        args[2] = "-sha=2e84e6446df300cd572930869c5ed2be8ee1f614";
         args[3] = "-github=github";
         args[4] = "-teamcity=teamcity-gonevertical";
         args[5] = "-returnurl=http://teamcity.gonevertical.org";
         args[6] = "-status=pending";
+        args[7] = "-skipcomment=true";
         
         PullNotification.main(args);
     }
     
     @Test
     public void testOptionalSuccess() {
-        String[] args = new String[7];
+        String[] args = new String[8];
         args[0] = "-ro=branflake2267";
         args[1] = "-rn=Sandbox";
-        args[2] = "-sha=b5b3362f0a4d8c3bc05ba0170ea72c3f7dbdd620";
+        args[2] = "-sha=2e84e6446df300cd572930869c5ed2be8ee1f614";
         args[3] = "-github=github";
         args[4] = "-teamcity=teamcity-gonevertical";
         args[5] = "-returnurl=http://teamcity.gonevertical.org";
         args[6] = "-status=success";
+        args[7] = "-skipcomment=false";
         
         PullNotification.main(args);
     }
     
     @Test
     public void testOptionalFail() {
-        String[] args = new String[7];
+        String[] args = new String[8];
         args[0] = "-ro=branflake2267";
         args[1] = "-rn=Sandbox";
-        args[2] = "-sha=b5b3362f0a4d8c3bc05ba0170ea72c3f7dbdd620";
+        args[2] = "-sha=2e84e6446df300cd572930869c5ed2be8ee1f614";
         args[3] = "-github=github";
         args[4] = "-teamcity=teamcity-gonevertical";
         args[5] = "-returnurl=http://teamcity.gonevertical.org";
         args[6] = "-status=failed";
+        args[7] = "-skipcomment=true";
         
         PullNotification.main(args);
     }
     
     @Test
     public void testOptionalError() {
-        String[] args = new String[7];
+        String[] args = new String[8];
         args[0] = "-ro=branflake2267";
         args[1] = "-rn=Sandbox";
-        args[2] = "-sha=b5b3362f0a4d8c3bc05ba0170ea72c3f7dbdd620";
+        args[2] = "-sha=2e84e6446df300cd572930869c5ed2be8ee1f614";
         args[3] = "-github=github";
         args[4] = "-teamcity=teamcity-gonevertical";
         args[5] = "-returnurl=http://teamcity.gonevertical.org";
         args[6] = "-status=error";
+        args[7] = "-skipcomment=true";
         
         PullNotification.main(args);
     }
