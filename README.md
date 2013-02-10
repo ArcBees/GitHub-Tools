@@ -13,12 +13,27 @@ Team City build server GitHub pull notification on build status application.
 * `-ro=RepositoryOwner` - Owner is either a user or organization.
 * `-rn=RepostioryName` - Repository name.
 * `-sha=2e84e6446df300cd572930869c5ed2be8ee1f614` - Latest commit sha reference in pull. 
- * `-sha=%build.vcs.number%` - Using the Team City variable filter.    
+ * `-sha=%build.vcs.number%` - Using the Team City variable parameter.    
 * `-github=github` - Maven ~/.m2/settings.xml GitHub server id.
+* `-teamcity=teamcity-gonevertical` - Maven ~/.m2/settings.xml Team City server id.
+* `-returnurl=http://teamcity.gonevertical.org` - Return url link for the the status link. 
+ * `-returnurl=%teamcity.serverUrl%` - Using the Team City variable parameter.
+
+####ORs
+Use either -buildid OR -status:
+
+* `-buildid=299` - Team City Build Id. This calls the rest api to check the status of the build. 
+ * `-buildid=%teamcity.build.id%` - Using the Team City variable parameter. 
+* `-status=pending`
+ * `-status=error`
+ * `-status=failed`
+ * `-status=success`
 
 ###Optional
 
 ###Maven Settings
+Two servers have to be added to use this applicaiton. Change the server id to your desire as long 
+as it is matched in the command line options. 
 
 * `-github=github` example:
 
@@ -26,6 +41,19 @@ Team City build server GitHub pull notification on build status application.
   <server>
       <id>github</id>
       <username>branflake2267</username>
-      <password>xxxxxx</password>
+      <password>xxxxxxx</password>
+  </server>
+  ```
+  
+* `-teamcity=teamcity-gonevertical` example:
+
+  ```xml
+  <server>
+      <id>teamcity-gonevertical</id>
+      <username>branflake2267</username>
+      <password>xxxxxxx</password>
+      <configuration>
+          <url>http://teamcity.gonevertical.org</url>
+      </configuration>
   </server>
   ```
