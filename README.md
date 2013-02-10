@@ -1,5 +1,5 @@
 #GitHub-Tools
-Team City build server GitHub pull notification on build status application.
+GitHub pull status commit and status notification command lineand/or Team City driven application.
 
 ##Reference
 * [Shell Script Templates](https://github.com/ArcBees/GitHub-Tools/tree/master/Github-Tools/src/main/resources/com/arcbees/run)
