@@ -6,3 +6,9 @@ Team City build server GitHub pull notification on build status application.
 
 ##Directions
 * [Directions and Screenshots](http://c.gwt-examples.com/home/maven/build-server/team-city/github-pull-notification-app)
+
+##Command Line Options
+* `-ro=RepositoryOwner` - Owner is either a user or organization.
+* `-rn=RepostioryName` - Repository name.
+* `-sha=2e84e6446df300cd572930869c5ed2be8ee1f614` - Latest commit sha reference in pull. 
+  * `-sha=%build.vcs.number%` - Using the Team City variable filter.  
