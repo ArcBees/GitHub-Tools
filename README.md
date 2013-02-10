@@ -1,5 +1,5 @@
 #GitHub-Tools
-GitHub pull status commit and status notification command lineand/or Team City driven application.
+GitHub pull status commit status notification command line and/or Team City driven application.
 
 ##Reference
 * [Shell Script Templates](https://github.com/ArcBees/GitHub-Tools/tree/master/Github-Tools/src/main/resources/com/arcbees/run)
