@@ -9,19 +9,23 @@ Team City build server GitHub pull notification on build status application.
 
 ##Command Line Options
 
+###Mandatory
 * `-ro=RepositoryOwner` - Owner is either a user or organization.
 * `-rn=RepostioryName` - Repository name.
 * `-sha=2e84e6446df300cd572930869c5ed2be8ee1f614` - Latest commit sha reference in pull. 
  * `-sha=%build.vcs.number%` - Using the Team City variable filter.    
 * `-github=github` - Maven ~/.m2/settings.xml GitHub server id.
 
+###Optional
+
 ###Maven Settings
 
 * `-github=github` example:
-```xml
+
+  ```xml
   <server>
       <id>github</id>
       <username>branflake2267</username>
       <password>xxxxxx</password>
-   </server>
-```
+  </server>
+  ```
