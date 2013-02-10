@@ -19,7 +19,7 @@ Team City build server GitHub pull notification on build status application.
 * `-returnurl=http://teamcity.gonevertical.org` - Return url link for the the status link. 
  * `-returnurl=%teamcity.serverUrl%` - Using the Team City variable parameter.
 
-###Mandatory ORs
+###Mandatory OR
 Use either `-buildid` OR `-status`:
 
 * `-buildid=299` - Team City Build Id. This calls the rest api to check the status of the build. 
