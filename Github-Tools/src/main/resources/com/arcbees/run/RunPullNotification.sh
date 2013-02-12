@@ -18,6 +18,6 @@ echo $MYCP
 echo ""
 
 # run the java
-java -cp $MYCP com.arcbees.github.PullNotification "$@"
+java -cp $MYCP com.arcbees.github.PullNotification "$@" &
 
 exit;

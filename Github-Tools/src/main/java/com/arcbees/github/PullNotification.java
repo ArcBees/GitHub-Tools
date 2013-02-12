@@ -244,7 +244,7 @@ public class PullNotification {
         // wait for a few seconds for last build to save to db
         // see if this fixes the build failures that are getting through. 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
