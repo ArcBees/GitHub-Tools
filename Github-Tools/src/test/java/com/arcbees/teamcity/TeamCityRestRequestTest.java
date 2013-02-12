@@ -25,7 +25,7 @@ public class TeamCityRestRequestTest {
     }
 
     @Test
-    public void testRestRequest() throws IOException {
+    public void testRestRequestSuccess() throws IOException {
         String serverUrl = "http://teamcity.gonevertical.org";
         String username = github.getUsername();
         String password = github.getPassword();
@@ -36,5 +36,19 @@ public class TeamCityRestRequestTest {
         
         Assert.assertNotNull(build);
         Assert.assertTrue(build.getStatus().contains("SUCC"));
+    }
+    
+    @Test
+    public void testRestRequestFailure() throws IOException {
+        String serverUrl = "http://teamcity.gonevertical.org";
+        String username = github.getUsername();
+        String password = github.getPassword();
+        int buildId = 466;
+        
+        TeamCityRestRequest rest = new TeamCityRestRequest(serverUrl, username, password);
+        Build build = rest.fetchBuildStatus(buildId);
+        
+        Assert.assertNotNull(build);
+        Assert.assertTrue(build.getStatus().contains("FAIL"));
     }
 }

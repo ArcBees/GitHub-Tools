@@ -236,6 +236,8 @@ public class PullNotification {
                 e.printStackTrace();
             }
         }
+        
+        System.exit(0);
     }
 
     private void autoCheckAndChangeGitPullStatus(int buildId) throws IOException {
