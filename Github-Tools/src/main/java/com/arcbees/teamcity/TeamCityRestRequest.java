@@ -2,7 +2,6 @@ package com.arcbees.teamcity;
 
 import java.io.IOException;
 
-
 import com.arcbees.teamcity.model.Build;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -38,6 +37,13 @@ public class TeamCityRestRequest {
     }
     
     public Build fetchBuildStatus(int buildId) throws IOException {
+        // wait for a few seconds for last build to save to db
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         String urlEndpoint = buildServerUrl + PATH_BUILD + Integer.toString(buildId);
         
         JsonElement json = RestRequest.fetchJson(username, password, urlEndpoint);
