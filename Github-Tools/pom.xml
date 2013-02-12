@@ -61,30 +61,9 @@
                 <version>${tomcat-maven-plugin.version}</version>
                 <configuration>
                     <!-- add the security credentials to ~/.m2/settings.xml <id>...</id> -->
-                    <server>goneverticalorg-tomcat</server>
+                    <server>${tomcat.server}</server>
                     <path>${tomcat.path}</path>
-                    <url>http://teamcity.gonevertical.org/manager/text</url>
-                    <update>true</update>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>${tomcat-maven-plugin.version}</version>
-                <configuration>
-                    <!-- add the security credentials to ~/.m2/settings.xml <id>...</id> -->
-                    <server>arcbees-tomcat</server>
-                    <path>${tomcat.path}</path>
-                    <url>http://teamcity-private.arcbees.com/manager/text</url>
+                    <url>${tomcat.url}</url>
                     <update>true</update>
                 </configuration>
                 <executions>
@@ -161,4 +140,21 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>arcbees</id>
+            <properties>
+                <tomcat.url>http://teamcity.gonevertical.org/manager/text</tomcat.url>
+                <tomcat.server>goneverticalorg-tomcat</tomcat.server>
+            </properties>
+        </profile>
+        
+        <profile>
+            <id>gonevertical</id>
+            <properties>
+                <tomcat.url>http://teamcity-private.arcbees.com/manager/text</tomcat.url>
+                <tomcat.server>arcbees-tomcat</tomcat.server>
+            </properties>
+        </profile>
+    </profiles>
 </project>
