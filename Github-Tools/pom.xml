@@ -142,7 +142,7 @@
 
     <profiles>
         <profile>
-            <id>arcbees</id>
+            <id>gonevertical</id>
             <properties>
                 <tomcat.url>http://teamcity.gonevertical.org/manager/text</tomcat.url>
                 <tomcat.server>goneverticalorg-tomcat</tomcat.server>
@@ -150,7 +150,7 @@
         </profile>
         
         <profile>
-            <id>gonevertical</id>
+            <id>arcbees</id>
             <properties>
                 <tomcat.url>http://teamcity-private.arcbees.com/manager/text</tomcat.url>
                 <tomcat.server>arcbees-tomcat</tomcat.server>
