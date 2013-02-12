@@ -241,6 +241,14 @@ public class PullNotification {
     }
 
     private void autoCheckAndChangeGitPullStatus(int buildId) throws IOException {
+        // wait for a few seconds for last build to save to db
+        // see if this fixes the build failures that are getting through. 
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         MavenTeamCity teamcitySettings = properties.getTeamCityCredentials(mavenSettingsTeamcityServerId);
 
         String buildServerUrl = teamcitySettings.getUrl();
