@@ -36,17 +36,13 @@ public class TeamCityRestRequest {
         this.password = buildServerPassword;
     }
     
-    public Build fetchBuildStatus(int buildId) throws IOException {
-        // wait for a few seconds for last build to save to db
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
+    public Build fetchBuildStatus(int buildId) throws IOException {        
         String urlEndpoint = buildServerUrl + PATH_BUILD + Integer.toString(buildId);
         
         JsonElement json = RestRequest.fetchJson(username, password, urlEndpoint);
+        
+        System.out.println("Rest Response: " + json.toString());
+        
         Gson gson = new Gson();
         
         return gson.fromJson(json, Build.class);
