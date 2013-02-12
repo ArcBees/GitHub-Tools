@@ -38,6 +38,6 @@ OPTS="$OPTS -skipcomment=true"
 echo "~~~OPTIONS: $OPTS"
 
 # run the java
-java -cp $MYCP com.arcbees.github.PullNotification $OPTS
+java -cp $MYCP com.arcbees.github.PullNotification $OPTS &
 
 exit;
