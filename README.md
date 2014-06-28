@@ -64,5 +64,3 @@ as it is matched in the command line options.
 [![Arcbees.com](http://arcbees-ads.appspot.com/ad.png)](http://arcbees.com)
 
 [![IntelliJ](https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png)](http://www.jetbrains.com/idea/index.html)
-
-[![githalytics.com alpha](https://cruel-carlota.gopagoda.com/786055362707d5af37c4b7b4d1232011 "githalytics.com")](http://githalytics.com/ArcBees/GitHub-Tools)
